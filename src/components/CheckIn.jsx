@@ -1,22 +1,10 @@
-import React, { useState, useRef, useEffect, useContext } from "react";
+import React, { useRef, useEffect, useContext } from "react";
 import Subjects from "./Subjects";
 import axios from "axios";
 import { PersonContext } from "../context/personContext";
 
 function CheckIn() {
-  const { value, setValue } = useContext(PersonContext);
-  const [person, setPerson] = useState({
-    id: null,
-    stuOrTea: "",
-    name: "",
-    subjects: {
-      Japanese: false,
-      Math: false,
-      "Social Studies": false,
-      Science: false,
-      English: false,
-    },
-  });
+  const { person, setPerson } = useContext(PersonContext);
 
   function toggleSubject(subject) {
     const newSubjects = person.subjects;
@@ -51,7 +39,6 @@ function CheckIn() {
     });
   }
 
-  // const isMounted = useRef(false);
   useEffect(() => {
     if (person.name) {
       const postPerson = async (personData) => {
@@ -69,7 +56,6 @@ function CheckIn() {
 
   return (
     <>
-      <div>{value}</div>
       <div>CheckIn</div>
       <select value={person.stuOrTea} onChange={updateStuOrTea}>
         <option>Select</option>

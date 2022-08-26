@@ -4,9 +4,20 @@ import CheckIn from "./components/CheckIn";
 import { PersonContext } from "./context/personContext";
 
 export default function App() {
-  const [value, setValue] = useState("hello from context");
+  const [person, setPerson] = useState({
+    id: null,
+    stuOrTea: "",
+    name: "",
+    subjects: {
+      Japanese: false,
+      Math: false,
+      "Social Studies": false,
+      Science: false,
+      English: false,
+    },
+  });
 
-  const providerValue = useMemo(() => ({ value, setValue }), [value, setValue]);
+  const providerValue = useMemo(() => ({ person, setPerson }), [person, setPerson]);
 
   return (
     <div className="App">
