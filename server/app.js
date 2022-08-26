@@ -64,7 +64,7 @@ app.post("/person", async (req, res) => {
     try {
       for (const subId of subIdArr) {
         await db.insert({
-          student_id: idObjArr[0].id,
+          [`${stuOrTea}_id`]: idObjArr[0].id,
           subject_id: subId,
         }).into(`${stuOrTea}s_subjects`);
       }
