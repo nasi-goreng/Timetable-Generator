@@ -13,3 +13,6 @@ exports.seed = async function (knex) {
     { subject: "English" },
   ]);
 };
+
+
+// knex seed:run --specific=seed-filename.js

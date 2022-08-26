@@ -19,6 +19,33 @@ app.get("/subjects", async (req, res) => {
   }
 });
 
+app.get("/date_period", async (req, res) => {
+  try {
+    const datePeriodArr = await db
+      .select("date", "period")
+      .from("date_period")
+      .orderBy("date");
+    res.json(datePeriodArr);
+  } catch (err) {
+    console.error("Error loading date_period!", err);
+    res.sendStatus(500);
+  }
+});
+
+app.get("/date", async (req, res) => {
+  try {
+    const dateArr = await db
+      .distinct("date")
+      .select("date")
+      .from("date_period")
+      .orderBy("date");
+    res.json(dateArr);
+  } catch (err) {
+    console.error("Error loading distinct date!", err);
+    res.sendStatus(500);
+  }
+});
+
 app.post("/person", async (req, res) => {
   try {
     // get a list of subject ids in an array
@@ -63,10 +90,12 @@ app.post("/person", async (req, res) => {
     // insert student_id and subject_ids into students_subjects table
     try {
       for (const subId of subIdArr) {
-        await db.insert({
-          [`${stuOrTea}_id`]: idObjArr[0].id,
-          subject_id: subId,
-        }).into(`${stuOrTea}s_subjects`);
+        await db
+          .insert({
+            [`${stuOrTea}_id`]: idObjArr[0].id,
+            subject_id: subId,
+          })
+          .into(`${stuOrTea}s_subjects`);
       }
     } catch (err) {
       console.error("Error inserting subject ids!", err);

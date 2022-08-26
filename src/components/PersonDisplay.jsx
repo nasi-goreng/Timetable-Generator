@@ -1,5 +1,6 @@
 import React, { useContext } from "react";
 import { PersonContext } from "../context/personContext";
+import ScheduleForm from "./ScheduleForm";
 
 function PersonDisplay() {
   const { person, setPerson } = useContext(PersonContext);
@@ -24,6 +25,7 @@ function PersonDisplay() {
           ))}
         </span>
       </div>
+      <ScheduleForm />
     </>
   );
 }
