@@ -1,6 +1,6 @@
 import React, { useState, useMemo } from "react";
 import "./App.css";
-import CheckIn from "./components/CheckIn";
+import View from "./components/View";
 import { PersonContext } from "./context/personContext";
 
 export default function App() {
@@ -22,7 +22,7 @@ export default function App() {
   return (
     <div className="App">
       <PersonContext.Provider value={providerValue}>
-        <CheckIn />
+        <View />
       </PersonContext.Provider>
     </div>
   );
