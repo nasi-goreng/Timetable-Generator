@@ -22,7 +22,7 @@ app.get("/subjects", async (req, res) => {
 app.get("/date_period", async (req, res) => {
   try {
     const datePeriodArr = await db
-      .select("date", "period")
+      .select("id", "date", "period")
       .from("date_period")
       .orderBy("period")
       .orderBy("date");
@@ -106,6 +106,23 @@ app.post("/person", async (req, res) => {
     res.send(String(idObjArr[0].id));
   } catch (err) {
     console.error("Error loading person id!", err);
+    res.sendStatus(500);
+  }
+});
+
+app.post("/availability", async (req, res) => {
+  try {
+    await db
+      .insert({
+        date_period_id: req.body.date_period_id,
+        [`${req.body.stuOrTea}_id`]: req.body.person_id,
+        isAvailable: false,
+      })
+      .into(`${req.body.stuOrTea}_availability`);
+    // console.log("INSERTED!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+    res.sendStatus(200);
+  } catch (err) {
+    console.error("Error inserting avaiablity", err);
     res.sendStatus(500);
   }
 });
