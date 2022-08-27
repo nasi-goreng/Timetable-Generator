@@ -88,13 +88,14 @@ app.post("/person", async (req, res) => {
       res.sendStatus(500);
     }
 
-    // insert student_id and subject_ids into students_subjects table
+    // insert student_id and subject_ids and the num of subjects into students_subjects table
     try {
       for (const subId of subIdArr) {
         await db
           .insert({
             [`${stuOrTea}_id`]: idObjArr[0].id,
             subject_id: subId,
+            num: // req.body から各科目のコマ数を持ってきてここにいれる
           })
           .into(`${stuOrTea}s_subjects`);
       }

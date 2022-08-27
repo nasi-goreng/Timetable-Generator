@@ -2,7 +2,13 @@ import React, { useRef, useEffect, useContext } from "react";
 import Subjects from "./Subjects";
 import axios from "axios";
 import { PersonContext } from "../context";
-import { Typography } from "@mui/material";
+import Box from "@mui/material/Box";
+import InputLabel from "@mui/material/InputLabel";
+import MenuItem from "@mui/material/MenuItem";
+import FormControl from "@mui/material/FormControl";
+import Select from "@mui/material/Select";
+import TextField from "@mui/material/TextField";
+import Button from "@mui/material/Button";
 
 export const Student = "student";
 export const Teacher = "teacher";
@@ -10,6 +16,7 @@ export const Teacher = "teacher";
 function CheckIn() {
   const { person, setPerson } = useContext(PersonContext);
 
+  // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
   function toggleSubject(subject) {
     const newSubjects = person.subjects;
     for (const eachSub in newSubjects) {
@@ -57,15 +64,43 @@ function CheckIn() {
 
   return (
     <>
-      <div>CheckIn</div>
-      <select value={person.stuOrTea} onChange={updateStuOrTea}>
-        <option>Select</option>
-        <option value={Student}>Student</option>
-        <option value={Teacher}>Teacher</option>
-      </select>
-      <input ref={inputRef} type="text" />
-      <Subjects person={person} toggleSubject={toggleSubject} />
-      <button onClick={handleSubmit}>Submit</button>
+      <Box
+        component="form"
+        sx={{
+          "& > :not(style)": { m: 1, width: "25ch" },
+        }}
+        noValidate
+        autoComplete="off"
+      >
+        <FormControl required style={{ minWidth: 200 }}>
+          <InputLabel id="demo-simple-select-label">Student/Teacher</InputLabel>
+          <Select
+            labelId="demo-simple-select-label"
+            id="demo-simple-select"
+            value={person.stuOrTea}
+            label="Student/Teacher"
+            onChange={updateStuOrTea}
+          >
+            <MenuItem value={Student}>
+              {Student[0].toUpperCase() + Student.slice(1)}
+            </MenuItem>
+            <MenuItem value={Teacher}>
+              {Teacher[0].toUpperCase() + Teacher.slice(1)}
+            </MenuItem>
+          </Select>
+        </FormControl>
+        <TextField
+          ref={inputRef}
+          id="outlined-basic"
+          label="Name"
+          variant="outlined"
+          required
+        />
+      </Box>
+      <Subjects />
+      <Button variant="outlined" onClick={handleSubmit}>
+        Submit
+      </Button>
     </>
   );
 }
