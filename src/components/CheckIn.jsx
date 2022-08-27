@@ -1,7 +1,8 @@
 import React, { useRef, useEffect, useContext } from "react";
 import Subjects from "./Subjects";
 import axios from "axios";
-import { PersonContext } from "../context/personContext";
+import { PersonContext } from "../context";
+import { Typography } from "@mui/material";
 
 export const Student = "student";
 export const Teacher = "teacher";
@@ -56,7 +57,7 @@ function CheckIn() {
 
   return (
     <>
-      <h3>CheckIn</h3>
+      <div>CheckIn</div>
       <select value={person.stuOrTea} onChange={updateStuOrTea}>
         <option>Select</option>
         <option value={Student}>Student</option>

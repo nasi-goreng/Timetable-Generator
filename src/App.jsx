@@ -1,7 +1,7 @@
 import React, { useState, useMemo } from "react";
 import "./App.css";
 import Tabs from "./components/Tabs";
-import { PersonContext } from "./context/personContext";
+import { DatesContext, PersonContext } from "./context";
 
 export default function App() {
   const [person, setPerson] = useState({
@@ -17,16 +17,20 @@ export default function App() {
     },
   });
 
-  const providerValue = useMemo(
+  const personProviderValue = useMemo(
     () => ({ person, setPerson }),
     [person, setPerson]
   );
 
+  const [dates, setDates] = useState([]);
+
   return (
     <div className="App">
       <h1>Scheduler</h1>
-      <PersonContext.Provider value={providerValue}>
-        <Tabs />
+      <PersonContext.Provider value={personProviderValue}>
+        <DatesContext.Provider value={{ dates, setDates }}>
+          <Tabs />
+        </DatesContext.Provider>
       </PersonContext.Provider>
     </div>
   );

@@ -1,5 +1,5 @@
 import React, { useContext, useState, useEffect } from "react";
-import { PersonContext } from "../context/personContext";
+import { DatesContext, PersonContext } from "../context";
 import { fetchDatePeriod, fetchDistinctDate } from "../createData/createData";
 import axios from "axios";
 
@@ -14,16 +14,23 @@ import { Button } from "@mui/material";
 
 export default function ScheduleForm() {
   const { person, setPerson } = useContext(PersonContext);
-  const [dates, setDates] = useState([]);
-  const [datesArr, setDatesArr] = useState([]);
+  const { dates, setDates } = useContext(DatesContext);
+  // const [dates, setDates] = useState([]);
   const [datePeriods, setDatePeriods] = useState([]);
   const [tableData, setTableData] = useState([]);
   const [avaiablity, setAvailability] = useState([]);
   // const [disabled, setDisabled] = useState(false);
 
-  // date and period data from database when mounting
+  // get date and period data from database when mounting
   useEffect(() => {
-    fetchDistinctDate().then((result) => setDates(result));
+    fetchDistinctDate().then((result) => {
+      const dates = [];
+      result.forEach((dateObj) => {
+        const newDate = new Date(dateObj.date);
+        dates.push(newDate.toLocaleDateString());
+      });
+      setDates(dates);
+    });
     fetchDatePeriod().then((result) => {
       // add disabled prop to each datePeriod object
       for (const datePeriod of result) {
@@ -32,18 +39,6 @@ export default function ScheduleForm() {
       setDatePeriods(result);
     });
   }, []);
-
-  // create an array of date strings, when dates has the data
-  useEffect(() => {
-    if (dates.length) {
-      const datesArr = [];
-      dates.forEach((dateObj) => {
-        const newDate = new Date(dateObj.date);
-        datesArr.push(newDate.toLocaleDateString());
-      });
-      setDatesArr(datesArr);
-    }
-  }, [dates]);
 
   // create an array of table cells, when datePeriods has the data
   useEffect(() => {
@@ -92,15 +87,17 @@ export default function ScheduleForm() {
     setDatePeriods(copyDatePeriods);
   }
 
+  // insert data into database by post
   async function postAvailability(data) {
     // console.log(avaiablity);
     for (const eachData of data) {
       try {
         await axios.post("/availability", eachData).then(
-          () => {return},
+          () => {
+            return;
+          },
           (err) => console.error("Error when inserting!", err)
         );
-
       } catch (err) {
         console.error("Cannot post availability", err);
       }
@@ -117,7 +114,7 @@ export default function ScheduleForm() {
         <Table sx={{ minWidth: 650 }} aria-label="simple table">
           <TableHead>
             <TableRow>
-              {datesArr.map((date, index) => (
+              {dates.map((date, index) => (
                 <TableCell key={index} align="center">
                   {date}
                 </TableCell>
