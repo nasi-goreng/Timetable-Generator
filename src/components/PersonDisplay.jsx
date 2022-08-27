@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import { PersonContext } from "../context/personContext";
+import { PersonContext } from "../context";
 import Stack from "@mui/material/Stack";
 
 function PersonDisplay() {

@@ -1,6 +1,7 @@
 import React, { useContext } from "react";
-import { PersonContext } from "../context/personContext";
+import { PersonContext } from "../context";
 import View from "./View";
+import Data from "./Data";
 
 import PropTypes from "prop-types";
 import Tabs from "@mui/material/Tabs";
@@ -65,7 +66,7 @@ export default function BasicTabs() {
         <View />
       </TabPanel>
       <TabPanel value={value} index={1}>
-        Item Two
+        <Data />
       </TabPanel>
     </Box>
   );

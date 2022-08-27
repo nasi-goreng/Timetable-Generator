@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import { PersonContext } from "../context/personContext";
+import { PersonContext } from "../context";
 import CheckIn from "./CheckIn";
 // import { Student, Teacher } from "./CheckIn";
 import PersonDisplay from "./PersonDisplay";

@@ -1,7 +1,7 @@
 import React, { useRef, useEffect, useContext } from "react";
 import Subjects from "./Subjects";
 import axios from "axios";
-import { PersonContext } from "../context/personContext";
+import { PersonContext } from "../context";
 import { Typography } from "@mui/material";
 
 export const Student = "student";
