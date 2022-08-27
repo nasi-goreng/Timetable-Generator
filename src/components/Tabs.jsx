@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
 import { PersonContext } from "../context/personContext";
-import View from "./View"
+import View from "./View";
 
 import PropTypes from "prop-types";
 import Tabs from "@mui/material/Tabs";
@@ -21,7 +21,7 @@ function TabPanel(props) {
     >
       {value === index && (
         <Box sx={{ p: 3 }}>
-          <Typography>{children}</Typography>
+          <Typography component={"span"}>{children}</Typography>
         </Box>
       )}
     </div>
