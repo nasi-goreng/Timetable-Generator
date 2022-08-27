@@ -1,6 +1,6 @@
 import React, { useState, useMemo } from "react";
 import "./App.css";
-import View from "./components/View";
+import Tabs from "./components/Tabs";
 import { PersonContext } from "./context/personContext";
 
 export default function App() {
@@ -17,12 +17,16 @@ export default function App() {
     },
   });
 
-  const providerValue = useMemo(() => ({ person, setPerson }), [person, setPerson]);
+  const providerValue = useMemo(
+    () => ({ person, setPerson }),
+    [person, setPerson]
+  );
 
   return (
     <div className="App">
+      <h1>Scheduler</h1>
       <PersonContext.Provider value={providerValue}>
-        <View />
+        <Tabs />
       </PersonContext.Provider>
     </div>
   );

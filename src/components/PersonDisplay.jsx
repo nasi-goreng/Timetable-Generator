@@ -1,5 +1,7 @@
 import React, { useContext } from "react";
 import { PersonContext } from "../context/personContext";
+import ScheduleForm from "./ScheduleForm";
+import Stack from "@mui/material/Stack";
 
 function PersonDisplay() {
   const { person, setPerson } = useContext(PersonContext);
@@ -13,17 +15,18 @@ function PersonDisplay() {
 
   return (
     <>
-      <h1>{person.stuOrTea}</h1>
-      <div>No. {person.id}</div>
-      <div>Name. {person.name}</div>
-      <div>
-        Subjects:
-        <span>
+      <h1>{person.stuOrTea[0].toUpperCase() + person.stuOrTea.slice(1)}</h1>
+      <Stack spacing={2} direction="row">
+        <div>No. {person.id}</div>
+        <div>Name. {person.name}</div>
+        <div>
+          Subjects:{" "}
           {subjectArr.map((subject, index) => (
-            <div key={index}>{subject}</div>
+            <span key={index}> {subject} </span>
           ))}
-        </span>
-      </div>
+        </div>
+      </Stack>
+      <ScheduleForm />
     </>
   );
 }

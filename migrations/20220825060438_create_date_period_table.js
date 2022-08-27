@@ -5,7 +5,7 @@
 exports.up = function (knex) {
   return knex.schema.createTable("date_period", (table) => {
     table.increments("id").primary();
-    table.date("date").notNullable().unique();
+    table.date("date").notNullable();
     table.integer("period").notNullable();
   });
 };
