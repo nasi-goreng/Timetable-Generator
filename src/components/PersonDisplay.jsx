@@ -1,6 +1,5 @@
 import React, { useContext } from "react";
-import { PersonContext } from "../context/personContext";
-import ScheduleForm from "./ScheduleForm";
+import { PersonContext } from "../context";
 import Stack from "@mui/material/Stack";
 
 function PersonDisplay() {
@@ -26,7 +25,6 @@ function PersonDisplay() {
           ))}
         </div>
       </Stack>
-      <ScheduleForm />
     </>
   );
 }
