@@ -119,7 +119,7 @@ app.post("/availability", async (req, res) => {
         isAvailable: false,
       })
       .into(`${req.body.stuOrTea}_availability`);
-    // console.log("INSERTED!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+    console.log("INSERTED!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
     res.sendStatus(200);
   } catch (err) {
     console.error("Error inserting avaiablity", err);

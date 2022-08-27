@@ -56,7 +56,7 @@ function CheckIn() {
 
   return (
     <>
-      <div>CheckIn</div>
+      <h3>CheckIn</h3>
       <select value={person.stuOrTea} onChange={updateStuOrTea}>
         <option>Select</option>
         <option value={Student}>Student</option>
