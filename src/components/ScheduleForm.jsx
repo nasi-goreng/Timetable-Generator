@@ -25,56 +25,68 @@ const rows = [
 export default function ScheduleForm() {
   const { person, setPerson } = useContext(PersonContext);
   const [dates, setDates] = useState([]);
+  const [datesArr, setDatesArr] = useState([]);
+  const [datePeriods, setDatePeriods] = useState([]);
+  const [tableData, setTableData] = useState([]);
 
   useEffect(() => {
     fetchDistinctDate().then((result) => setDates(result));
-    const asyncSetDates = async () => {
-      const response = await fetchDatePeriod();
-      setDates(response);
-      
-    }
+    fetchDatePeriod().then((result) => setDatePeriods(result));
   }, []);
 
-  const datesArr = [];
+  console.log(datePeriods);
+
   useEffect(() => {
     if (dates.length) {
+      const datesArr = [];
       dates.forEach((dateObj) => {
         const newDate = new Date(dateObj.date);
         datesArr.push(newDate.toLocaleDateString());
       });
+      setDatesArr(datesArr);
     }
-  }, [...dates]);
+  }, [dates]);
 
-  console.log(datesArr);
+  // console.log([datesArr]);
+
+  useEffect(() => {
+    if (datePeriods.length) {
+      const tableCells = [];
+      for (let i = 0; i < datePeriods.length; ) {
+        const row = [];
+        for (let j = 0; j < 7; j++) {
+          row.push(
+            <TableCell align="center">
+              <button>{datePeriods[i].period}</button>
+            </TableCell>
+          );
+          i++;
+        }
+        tableCells.push(row);
+      }
+      setTableData(tableCells);
+    }
+  }, [datePeriods]);
 
   return (
     <TableContainer component={Paper}>
       <Table sx={{ minWidth: 650 }} aria-label="simple table">
         <TableHead>
           <TableRow>
-            {datesArr.map((date, index) => {
-              console.log(date);
-              return (
-                <TableCell key={index} align="center">
-                  {date}
-                </TableCell>
-              );
-            })}
+            {datesArr.map((date, index) => (
+              <TableCell key={index} align="center">
+                {date}
+              </TableCell>
+            ))}
           </TableRow>
         </TableHead>
         <TableBody>
-          {rows.map((row) => (
+          {tableData.map((row, index) => (
             <TableRow
-              key={row.name}
+              key={index}
               sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
             >
-              <TableCell component="th" scope="row">
-                {row.name}
-              </TableCell>
-              <TableCell align="center">{row.calories}</TableCell>
-              <TableCell align="center">{row.fat}</TableCell>
-              <TableCell align="center">{row.carbs}</TableCell>
-              <TableCell align="center">{row.protein}</TableCell>
+              {[...row]}
             </TableRow>
           ))}
         </TableBody>

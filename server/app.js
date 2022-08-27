@@ -24,6 +24,7 @@ app.get("/date_period", async (req, res) => {
     const datePeriodArr = await db
       .select("date", "period")
       .from("date_period")
+      .orderBy("period")
       .orderBy("date");
     res.json(datePeriodArr);
   } catch (err) {

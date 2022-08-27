@@ -4,7 +4,6 @@ const axios = require("axios");
 export const fetchDatePeriod = async () => {
   try {
     const { data: response } = await axios.get("/date_period");
-    console.log(response);
     return response;
   } catch (err) {
     console.error("Cannot get date_period data", err);
