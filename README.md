@@ -8,7 +8,7 @@ Timetable Generator is a web app that enables you to create a timetable easily. 
 1. Download the content of this repo.
 2. Install all the dependencies in the parckage.json with ```npm install```
 3. Start up postgresSQL.
-4. Defined ```DB_USER, DB_PASSWORD, DB_NAME``` in ```.env.local```file.
+4. Define ```DB_USER, DB_PASSWORD, DB_NAME``` in ```.env.local```file.
 5. Create a database with the name of ```DB_NAME```
 6. Run ```npm run dev```
 7. Run ```npm run hack```
