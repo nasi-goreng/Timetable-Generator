@@ -49,13 +49,14 @@ export default function ScheduleForm() {
         for (let j = 0; j < 7; j++) {
           row.push(
             <TableCell key={datePeriods[i].id} align="center">
-              <button
+              <Button
                 value={datePeriods[i].id}
                 disabled={datePeriods[i].disabled}
                 onClick={updateAvailability}
+                variant="outlined"
               >
                 {datePeriods[i].period}
-              </button>
+              </Button>
             </TableCell>
           );
           i++;
@@ -89,7 +90,7 @@ export default function ScheduleForm() {
 
   // insert data into database by post
   async function postAvailability(data) {
-    // console.log(avaiablity);
+    console.log(avaiablity);
     for (const eachData of data) {
       try {
         await axios.post("/availability", eachData).then(
@@ -133,7 +134,7 @@ export default function ScheduleForm() {
           </TableBody>
         </Table>
       </TableContainer>
-      <Button onClick={() => postAvailability(avaiablity)}>Submit</Button>
+      <Button variant="contained" onClick={() => postAvailability(avaiablity)}>Submit</Button>
     </>
   );
 }
