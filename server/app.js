@@ -168,11 +168,14 @@ app.get("/available_teachers", async (req, res) => {
   try {
     const arr = await db
       .select(
+        "teacher_availability.id as uniqId",
         "teachers.name",
         "date_period.id as date_period_id",
         "date",
-        "period"
+        "period",
+        "isAvailable"
       )
+      .distinct("date_period.id")
       // .count({subCount: "teachers_subjects.subject_id"})
       .from("teacher_availability")
       .leftJoin("teachers", {
@@ -185,7 +188,7 @@ app.get("/available_teachers", async (req, res) => {
       .leftJoin("date_period", {
         "date_period.id": "teacher_availability.date_period_id",
       })
-      .where({ isAvailable: true })
+      // .where({ isAvailable: true })
       // .andWhere({ num: 1 })
       // .andWhere({date: new Date(2022, 8, 25)})
       .orderBy("period")
