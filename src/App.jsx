@@ -26,7 +26,7 @@ export default function App() {
 
   return (
     <div className="App">
-      <h1>Scheduler</h1>
+      <h1>Timetable Generator</h1>
       <PersonContext.Provider value={personProviderValue}>
         <DatesContext.Provider value={{ dates, setDates }}>
           <Tabs />
