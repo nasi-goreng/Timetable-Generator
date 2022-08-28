@@ -83,7 +83,7 @@ function CheckIn() {
         />
       </Box>
       <Subjects />
-      <Button variant="outlined" onClick={handleSubmit}>
+      <Button variant="contained" onClick={handleSubmit}>
         Submit
       </Button>
     </>
