@@ -1,7 +1,9 @@
-import React, { useContext } from "react";
-import { PersonContext } from "../context";
+import React, { useContext, useEffect } from "react";
+import { PersonContext, DatesContext } from "../context";
+// import { fetchDatePeriod, fetchDistinctDate } from "../createData/createData";
 import View from "./View";
 import Data from "./Data";
+import Json from "../deprecated/Json";
 
 import PropTypes from "prop-types";
 import Tabs from "@mui/material/Tabs";
@@ -11,6 +13,19 @@ import Box from "@mui/material/Box";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
+  // const { dates, setDates } = useContext(DatesContext);
+
+  // // get dates
+  // useEffect(() => {
+  //   fetchDistinctDate().then((result) => {
+  //     const dates = [];
+  //     result.forEach((dateObj) => {
+  //       const newDate = new Date(dateObj.date);
+  //       dates.push(newDate.toLocaleDateString());
+  //     });
+  //     setDates(dates);
+  //   });
+  // }, []);
 
   return (
     <div
@@ -60,6 +75,7 @@ export default function BasicTabs() {
         >
           <Tab label="Form" {...a11yProps(0)} />
           <Tab label="Data" {...a11yProps(1)} />
+          <Tab label="Json" {...a11yProps(1)} />
         </Tabs>
       </Box>
       <TabPanel value={value} index={0}>
@@ -67,6 +83,9 @@ export default function BasicTabs() {
       </TabPanel>
       <TabPanel value={value} index={1}>
         <Data />
+      </TabPanel>
+      <TabPanel value={value} index={2}>
+        <Json />
       </TabPanel>
     </Box>
   );

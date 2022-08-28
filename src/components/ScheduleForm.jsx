@@ -23,6 +23,7 @@ export default function ScheduleForm() {
 
   // get date and period data from database when mounting
   useEffect(() => {
+    // fetching just dates was NOT moved to Tabs
     fetchDistinctDate().then((result) => {
       const dates = [];
       result.forEach((dateObj) => {
@@ -40,7 +41,7 @@ export default function ScheduleForm() {
     });
   }, []);
 
-  // create an array of table cells, when datePeriods has the data
+  // create an array of table cells with period buttons, when datePeriods has the data
   useEffect(() => {
     if (datePeriods.length) {
       const tableCells = [];
@@ -89,11 +90,10 @@ export default function ScheduleForm() {
   }
 
   // insert data into database by post
-  async function postAvailability(data) {
-    console.log(avaiablity);
+  async function patchAvailability(data) {
     for (const eachData of data) {
       try {
-        await axios.post("/availability", eachData).then(
+        await axios.patch("/availability", eachData).then(
           () => {
             return;
           },
@@ -134,7 +134,7 @@ export default function ScheduleForm() {
           </TableBody>
         </Table>
       </TableContainer>
-      <Button variant="contained" onClick={() => postAvailability(avaiablity)}>Submit</Button>
+      <Button variant="contained" onClick={() => patchAvailability(avaiablity)}>Submit</Button>
     </>
   );
 }
