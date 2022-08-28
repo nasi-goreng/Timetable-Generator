@@ -16,19 +16,6 @@ export const Teacher = "teacher";
 function CheckIn() {
   const { person, setPerson } = useContext(PersonContext);
 
-  // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-  function toggleSubject(subject) {
-    const newSubjects = person.subjects;
-    for (const eachSub in newSubjects) {
-      if (eachSub === subject) {
-        newSubjects[eachSub] = !newSubjects[eachSub];
-      }
-    }
-    setPerson({
-      ...person,
-      subjects: newSubjects,
-    });
-  }
 
   function updateStuOrTea(e) {
     setPerson({
@@ -37,20 +24,10 @@ function CheckIn() {
     });
   }
 
-  const inputRef = useRef();
   function handleSubmit() {
-    const name = inputRef.current.value;
-    if (name === "" || person.stuOrTea === "") {
+    if (person.name === "" || person.stuOrTea === "") {
       return;
     }
-    setPerson({
-      ...person,
-      name: name,
-    });
-  }
-
-  useEffect(() => {
-    if (person.name) {
       const postPerson = async (personData) => {
         const { data: id } = await axios.post("/person", personData);
         setPerson({
@@ -59,8 +36,15 @@ function CheckIn() {
         });
       };
       postPerson(person);
-    }
-  }, [person.name]);
+  }
+
+  function handleChangeText(e) {
+    setPerson({
+      ...person,
+      name: e.target.value,
+    });
+  }
+
 
   return (
     <>
@@ -90,11 +74,12 @@ function CheckIn() {
           </Select>
         </FormControl>
         <TextField
-          ref={inputRef}
           id="outlined-basic"
           label="Name"
           variant="outlined"
+          value={person.name}
           required
+          onChange={handleChangeText}
         />
       </Box>
       <Subjects />

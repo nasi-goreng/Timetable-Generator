@@ -50,7 +50,7 @@ app.get("/date", async (req, res) => {
 app.post("/person", async (req, res) => {
   try {
     // get a list of subject ids in an array
-    let subIdArr = []; // [1, ...]
+    let subIdNameArr = []; // [{Japanese: 1}, ...]
     try {
       const subObj = req.body.subjects; // { Japanese: true, Math: false, ...}
       const subArr = []; // [Japanese, ...]
@@ -59,13 +59,10 @@ app.post("/person", async (req, res) => {
           subArr.push(key);
         }
       }
-      const subIdObjArr = await db // [ { id: 1 }, { id: }, ...]
-        .select("id")
+      subIdNameArr = await db // [ { id: 1, subject: Japanese }, { id: }, ...]
+        .select()
         .from("subjects")
         .whereIn("subject", subArr);
-      for (const idObj of subIdObjArr) {
-        subIdArr.push(idObj.id);
-      }
     } catch (err) {
       console.error("Error loading subject id list!", err);
       res.sendStatus(500);
@@ -90,15 +87,25 @@ app.post("/person", async (req, res) => {
 
     // insert student_id and subject_ids and the num of subjects into students_subjects table
     try {
-      for (const subId of subIdArr) {
+      for (const subIdName of subIdNameArr) {
         await db
           .insert({
             [`${stuOrTea}_id`]: idObjArr[0].id,
-            subject_id: subId,
-            num: // req.body から各科目のコマ数を持ってきてここにいれる
+            subject_id: subIdName.id,
+            num: req.body.subjects[subIdName.subject],// req.body から各科目のコマ数を持ってきてここにいれる
           })
           .into(`${stuOrTea}s_subjects`);
       }
+    
+      // ちゃんと入ってるかコンソールで確認するため
+      // try {
+      //   const output = await db.select().from(`${stuOrTea}s_subjects`);
+      //   console.log(output);
+      // } catch (err) {
+      //   console.error("Error getting students/teachers_subjects!", err);
+      //   res.sendStatus(500);
+      // }
+
     } catch (err) {
       console.error("Error inserting subject ids!", err);
       res.sendStatus(500);
