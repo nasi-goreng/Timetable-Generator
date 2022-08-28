@@ -6,6 +6,7 @@
   return knex.schema.createTable("teachers_subjects", (table) => {
     table.integer("teacher_id").references("id").inTable("teachers");
     table.integer("subject_id").references("id").inTable("subjects");
+    table.integer("num");
   });
 };
 

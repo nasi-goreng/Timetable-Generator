@@ -6,6 +6,7 @@ exports.up = function (knex) {
   return knex.schema.createTable("students_subjects", (table) => {
     table.integer("student_id").references("id").inTable("students");
     table.integer("subject_id").references("id").inTable("subjects");
+    table.integer("num");
   });
 };
 

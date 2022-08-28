@@ -9,11 +9,11 @@ export default function App() {
     stuOrTea: "",
     name: "",
     subjects: {
-      Japanese: false,
-      Math: false,
-      "Social Studies": false,
-      Science: false,
-      English: false,
+      Japanese: 0,
+      Math: 0,
+      "Social Studies": 0,
+      Science: 0,
+      English: 0,
     },
   });
 

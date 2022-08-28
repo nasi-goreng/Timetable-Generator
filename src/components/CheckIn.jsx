@@ -2,7 +2,13 @@ import React, { useRef, useEffect, useContext } from "react";
 import Subjects from "./Subjects";
 import axios from "axios";
 import { PersonContext } from "../context";
-import { Typography } from "@mui/material";
+import Box from "@mui/material/Box";
+import InputLabel from "@mui/material/InputLabel";
+import MenuItem from "@mui/material/MenuItem";
+import FormControl from "@mui/material/FormControl";
+import Select from "@mui/material/Select";
+import TextField from "@mui/material/TextField";
+import Button from "@mui/material/Button";
 
 export const Student = "student";
 export const Teacher = "teacher";
@@ -10,18 +16,6 @@ export const Teacher = "teacher";
 function CheckIn() {
   const { person, setPerson } = useContext(PersonContext);
 
-  function toggleSubject(subject) {
-    const newSubjects = person.subjects;
-    for (const eachSub in newSubjects) {
-      if (eachSub === subject) {
-        newSubjects[eachSub] = !newSubjects[eachSub];
-      }
-    }
-    setPerson({
-      ...person,
-      subjects: newSubjects,
-    });
-  }
 
   function updateStuOrTea(e) {
     setPerson({
@@ -30,20 +24,10 @@ function CheckIn() {
     });
   }
 
-  const inputRef = useRef();
   function handleSubmit() {
-    const name = inputRef.current.value;
-    if (name === "" || person.stuOrTea === "") {
+    if (person.name === "" || person.stuOrTea === "") {
       return;
     }
-    setPerson({
-      ...person,
-      name: name,
-    });
-  }
-
-  useEffect(() => {
-    if (person.name) {
       const postPerson = async (personData) => {
         const { data: id } = await axios.post("/person", personData);
         setPerson({
@@ -52,20 +36,56 @@ function CheckIn() {
         });
       };
       postPerson(person);
-    }
-  }, [person.name]);
+  }
+
+  function handleChangeText(e) {
+    setPerson({
+      ...person,
+      name: e.target.value,
+    });
+  }
+
 
   return (
     <>
-      <div>CheckIn</div>
-      <select value={person.stuOrTea} onChange={updateStuOrTea}>
-        <option>Select</option>
-        <option value={Student}>Student</option>
-        <option value={Teacher}>Teacher</option>
-      </select>
-      <input ref={inputRef} type="text" />
-      <Subjects person={person} toggleSubject={toggleSubject} />
-      <button onClick={handleSubmit}>Submit</button>
+      <Box
+        component="form"
+        sx={{
+          "& > :not(style)": { m: 1, width: "25ch" },
+        }}
+        noValidate
+        autoComplete="off"
+      >
+        <FormControl required style={{ minWidth: 200 }}>
+          <InputLabel id="demo-simple-select-label">Student/Teacher</InputLabel>
+          <Select
+            labelId="demo-simple-select-label"
+            id="demo-simple-select"
+            value={person.stuOrTea}
+            label="Student/Teacher"
+            onChange={updateStuOrTea}
+          >
+            <MenuItem value={Student}>
+              {Student[0].toUpperCase() + Student.slice(1)}
+            </MenuItem>
+            <MenuItem value={Teacher}>
+              {Teacher[0].toUpperCase() + Teacher.slice(1)}
+            </MenuItem>
+          </Select>
+        </FormControl>
+        <TextField
+          id="outlined-basic"
+          label="Name"
+          variant="outlined"
+          value={person.name}
+          required
+          onChange={handleChangeText}
+        />
+      </Box>
+      <Subjects />
+      <Button variant="outlined" onClick={handleSubmit}>
+        Submit
+      </Button>
     </>
   );
 }
