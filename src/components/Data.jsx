@@ -16,6 +16,7 @@ function Data() {
   const [data, setData] = useState([]);
   const [teaSub, setTeaSub] = useState([]);
   const [rows, setRows] = useState([]);
+  const [stuRows, setStuRows] = useState([]);
   const [dataPerPeriod, setDataPerPeriod] = useState({
     1: [],
     2: [],
@@ -47,9 +48,10 @@ function Data() {
   }, []);
 
   useEffect(() => {
-    createTabelCells(dataPerPeriod);
+    createTeaTabelCells(dataPerPeriod);
+    // createStuTableCells(dataPerPeriod);
     // console.log(dataPerPeriod);
-  }, [dataPerPeriod]);
+  }, [dataPerPeriod, teaSub]);
 
   // useEffect(() => {
   //   console.log(rows);
@@ -63,17 +65,18 @@ function Data() {
     setDataPerPeriod(copy);
   }
 
-  function createTabelCells(objByPeriod) {
+  function createTeaTabelCells(objByPeriod) {
     const rowCellsArr = [];
     for (const period in objByPeriod) {
       const cellsByPeriod = [];
-      console.log(cellsByPeriod);
       for (const eachData of objByPeriod[period]) {
         if (eachData.isAvailable) {
           cellsByPeriod.push(
             <TableCell key={eachData.uniqId} align="center">
               {eachData.name}:{" "}
-              {teaSub[eachData.name]?.map((subject) => subject + " ")}
+              {teaSub[eachData.name]?.map(
+                (subject) => subject.slice(0, 2) + " "
+              )}
             </TableCell>
           );
         } else {
@@ -82,12 +85,33 @@ function Data() {
           );
         }
       }
-      cellsByPeriod.unshift(<TableCell>{period}</TableCell>);
+      cellsByPeriod.unshift(<TableCell key={period - 5}>{period}</TableCell>);
       rowCellsArr.push(cellsByPeriod);
     }
-    // console.log(rowCellsArr);
     setRows(rowCellsArr);
   }
+
+  // function createStuTableCells(objByPeriod) {
+  //   const tempStuRows = {
+  //     1: [],
+  //     2: [],
+  //     3: [],
+  //     4: [],
+  //   };
+  //   for (const period in objByPeriod) {
+  //     const stuCellRows = [];
+  //     for (let i = 0; i < 3; i++) {
+  //       const stuCells = [];
+  //       for (const eachData of objByPeriod) {
+  //         stuCells.push(<TableCell key={eachData.uniqId + i}></TableCell>);
+  //       }
+  //       stuCellRows.push(stuCells);
+  //       stuCells.unshift(<TableCell key={period - 5}>{period}</TableCell>);
+  //     }
+  //     tempStuRows[period] = stuCellRows;
+  //   }
+  //   setStuRows(tempStuRows);
+  // }
 
   return (
     <>
