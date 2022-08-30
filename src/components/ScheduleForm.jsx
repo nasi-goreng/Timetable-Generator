@@ -23,15 +23,7 @@ export default function ScheduleForm() {
 
   // get date and period data from database when mounting
   useEffect(() => {
-    // fetching just dates was NOT moved to Tabs
-    fetchDistinctDate().then((result) => {
-      const dates = [];
-      result.forEach((dateObj) => {
-        const newDate = new Date(dateObj.date);
-        dates.push(newDate.toLocaleDateString());
-      });
-      setDates(dates);
-    });
+    // fetching just dates WAS moved to Tabs
     fetchDatePeriod().then((result) => {
       // add disabled prop to each datePeriod object
       for (const datePeriod of result) {

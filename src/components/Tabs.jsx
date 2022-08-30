@@ -1,6 +1,6 @@
 import React, { useContext, useEffect } from "react";
 import { PersonContext, DatesContext } from "../context";
-// import { fetchDatePeriod, fetchDistinctDate } from "../createData/createData";
+import { fetchDatePeriod, fetchDistinctDate } from "../createData/createData";
 import View from "./View";
 import Data from "./Data";
 import Json from "../deprecated/Json";
@@ -13,19 +13,19 @@ import Box from "@mui/material/Box";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
-  // const { dates, setDates } = useContext(DatesContext);
+  const { dates, setDates } = useContext(DatesContext);
 
-  // // get dates
-  // useEffect(() => {
-  //   fetchDistinctDate().then((result) => {
-  //     const dates = [];
-  //     result.forEach((dateObj) => {
-  //       const newDate = new Date(dateObj.date);
-  //       dates.push(newDate.toLocaleDateString());
-  //     });
-  //     setDates(dates);
-  //   });
-  // }, []);
+  // get dates
+  useEffect(() => {
+    fetchDistinctDate().then((result) => {
+      const dates = [];
+      result.forEach((dateObj) => {
+        const newDate = new Date(dateObj.date);
+        dates.push(newDate.toLocaleDateString());
+      });
+      setDates(dates);
+    });
+  }, []);
 
   return (
     <div

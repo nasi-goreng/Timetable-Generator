@@ -15,6 +15,7 @@ function Data() {
   const { dates, setDates } = useContext(DatesContext);
   const [data, setData] = useState([]);
   const [teaSub, setTeaSub] = useState([]);
+  const [numTea, setNumTea] = useState(0);
   const [rows, setRows] = useState([]);
   const [stuRows, setStuRows] = useState([]);
   const [dataPerPeriod, setDataPerPeriod] = useState({
@@ -43,6 +44,9 @@ function Data() {
       }
       setTeaSub(teaToSub);
     }
+    // async function fetchNumOfTea() {
+    //   const { data: response } = await axios.get("/num_of_te")
+    // }
     fetchAvailableTeachers();
     fetchSubsPerTea();
   }, []);
@@ -56,6 +60,9 @@ function Data() {
   // useEffect(() => {
   //   console.log(rows);
   // }, [rows]);
+  // useEffect(() => {
+  //   console.log(dates);
+  // }, [dates]);
 
   function pushDataByPeriod(objArr) {
     const copy = JSON.parse(JSON.stringify(dataPerPeriod));
@@ -120,10 +127,15 @@ function Data() {
           <TableHead>
             <TableRow>
               <TableCell></TableCell>
-              {dataPerPeriod[1]?.map((eachData) => {
+              {dates?.map((date, index) => {
+                console.log(dataPerPeriod[1].length / 7);
                 return (
-                  <TableCell key={eachData.uniqId} align="center">
-                    {new Date(eachData.date).toLocaleDateString()}
+                  <TableCell
+                    colSpan={dataPerPeriod[1].length / 7}
+                    key={index}
+                    align="center"
+                  >
+                    {new Date(date).toLocaleDateString()}
                   </TableCell>
                 );
               })}
