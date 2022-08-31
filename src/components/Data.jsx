@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import { DatesContext } from "../context";
 import axios from "axios";
+import { v4 as uuidv4 } from "uuid";
 
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -15,10 +16,8 @@ function Data() {
   const { dates, setDates } = useContext(DatesContext);
   const [data, setData] = useState([]);
   const [teaSub, setTeaSub] = useState([]);
-  const [numTea, setNumTea] = useState(0);
-  const [rows, setRows] = useState([]);
-  const [stuRows, setStuRows] = useState([]);
-  const [allRows, setAllRows] = useState([]);
+  const [teachers, setTeachers] = useState([]);
+  const [studentRows, setStudentRows] = useState([]);
   const [dataPerPeriod, setDataPerPeriod] = useState({
     1: [],
     2: [],
@@ -59,8 +58,10 @@ function Data() {
     fetchSubsPerTea();
   }, []);
 
+  // create rows and cells when the necessary data is ready
   useEffect(() => {
-    createTableCells(dataPerPeriod);
+    createTeacherCells(dataPerPeriod[1]);
+    createStudentCells(dataPerPeriod);
     putRowsIntoArray(rowsPerPeriod);
   }, [dataPerPeriod, teaSub]);
 
@@ -72,7 +73,21 @@ function Data() {
     setDataPerPeriod(copy);
   }
 
-  function createTableCells(objByPeriod) {
+  function createTeacherCells(teacherList) {
+    const teachersArr = [];
+    for (const eachData of teacherList) {
+      teachersArr.push(
+        <TableCell key={eachData.uniqId} align="center">
+          {eachData.name}:{" "}
+          {teaSub[eachData.name]?.map((subject) => subject.slice(0, 2) + " ")}
+        </TableCell>
+      );
+    }
+    teachersArr.unshift(<TableCell key={uuidv4()}></TableCell>);
+    setTeachers(teachersArr);
+  }
+
+  function createStudentCells(objByPeriod) {
     const newCells = {
       1: [],
       2: [],
@@ -82,33 +97,49 @@ function Data() {
 
     for (const period in objByPeriod) {
       // teacher row
-      const cellsByRow = [];
-      for (const eachData of objByPeriod[period]) {
-        if (eachData.isAvailable) {
-          cellsByRow.push(
-            <TableCell key={eachData.uniqId} align="center">
-              {eachData.name}:{" "}
-              {teaSub[eachData.name]?.map(
-                (subject) => subject.slice(0, 2) + " "
-              )}
-            </TableCell>
-          );
-        } else {
-          cellsByRow.push(
-            <TableCell  key={eachData.uniqId} align="center"></TableCell>
-          );
-        }
-      }
-      cellsByRow.unshift(<TableCell rowSpan={4} key={period - 5}>{period}</TableCell>);
-      newCells[period].push(cellsByRow);
+      // const cellsByRow = [];
+      // for (const eachData of objByPeriod[period]) {
+      //   if (eachData.isAvailable) {
+      //     cellsByRow.push(
+      //       <TableCell key={eachData.uniqId} align="center">
+      //         {eachData.name}:{" "}
+      //         {teaSub[eachData.name]?.map(
+      //           (subject) => subject.slice(0, 2) + " "
+      //         )}
+      //       </TableCell>
+      //     );
+      //   } else {
+      //     cellsByRow.push(
+      //       <TableCell key={eachData.uniqId} align="center"></TableCell>
+      //     );
+      //   }
+      // }
+      // cellsByRow.unshift(
+      //   <TableCell rowSpan={4} key={period - 5}>
+      //     {period}
+      //   </TableCell>
+      // );
+      // newCells[period].push(cellsByRow);
 
       // student rows
       for (let i = 0; i < 3; i++) {
         const stuCells = [];
         for (const eachData of objByPeriod[period]) {
-          stuCells.push(<TableCell key={eachData.uniqId + i}></TableCell>);
+          const available = eachData.isAvailable;
+          const cellStyles = {
+            backgroundColor: !available ? "grey" : "while",
+          };
+          stuCells.push(
+            <TableCell style={cellStyles} key={eachData.uniqId + i}></TableCell>
+          );
         }
-        // stuCells.unshift(<TableCell key={period - 5}>{period}</TableCell>);
+        if (i === 0) {
+          stuCells.unshift(
+            <TableCell rowSpan={3} key={period - 5}>
+              {period}
+            </TableCell>
+          );
+        }
         newCells[period].push(stuCells);
       }
     }
@@ -116,19 +147,22 @@ function Data() {
   }
 
   function putRowsIntoArray(rowsByPeriod) {
-    const allRows = [];
+    const studentRowsArr = [];
     for (const period in rowsByPeriod) {
       for (const eachRow of rowsByPeriod[period]) {
-        allRows.push(eachRow);
+        studentRowsArr.push(eachRow);
       }
     }
-    setAllRows(allRows);
+    setStudentRows(studentRowsArr);
   }
 
   return (
     <>
       <TableContainer component={Paper}>
-        <Table sx={{ minWidth: 650 }} aria-label="simple table">
+        <Table
+          /*sx={{ minWidth: 650 }}*/ size="small"
+          aria-label="a dense table"
+        >
           <TableHead>
             <TableRow>
               <TableCell></TableCell>
@@ -146,7 +180,16 @@ function Data() {
             </TableRow>
           </TableHead>
           <TableBody>
-            {allRows.map((row, index) => (
+            <TableRow
+              key={uuidv4()}
+              sx={{
+                "&:last-child td, &:last-child th": { border: 0 },
+                height: 10,
+              }}
+            >
+              {teachers}
+            </TableRow>
+            {studentRows.map((row, index) => (
               <TableRow
                 key={index}
                 sx={{
