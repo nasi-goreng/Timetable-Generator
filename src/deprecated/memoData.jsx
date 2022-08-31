@@ -18,30 +18,26 @@ function Data() {
   const [numTea, setNumTea] = useState(0);
   const [rows, setRows] = useState([]);
   const [stuRows, setStuRows] = useState([]);
-  const [allRows, setAllRows] = useState([]);
+  // const [allRows, setAllRows] = useState([])
   const [dataPerPeriod, setDataPerPeriod] = useState({
     1: [],
     2: [],
     3: [],
     4: [],
   });
-  const [rowsPerPeriod, setRowsPerPeriod] = useState({
-    1: [],
-    2: [],
-    3: [],
-    4: [],
-  });
+  // const [rowsPerPeriod, setRowsPerPeriod] = useState({
+  //   1: [],
+  //   2: [],
+  //   3: [],
+  //   4: [],
+  // });
 
   // get necessary data when mounting
   useEffect(() => {
     async function fetchAvailableTeachers() {
-      try {
-        const { data: response } = await axios.get("/available_teachers");
-        setData(response);
-        pushDataByPeriod(response);
-      } catch (err) {
-        console.error("Error getting available teachers!", err);
-      }
+      const { data: response } = await axios.get("/available_teachers");
+      setData(response);
+      pushDataByPeriod(response);
     }
     async function fetchSubsPerTea() {
       const { data: response } = await axios.get("/teachers_subjects");
@@ -55,14 +51,25 @@ function Data() {
       }
       setTeaSub(teaToSub);
     }
+    // async function fetchNumOfTea() {
+    //   const { data: response } = await axios.get("/num_of_te")
+    // }
     fetchAvailableTeachers();
     fetchSubsPerTea();
   }, []);
 
   useEffect(() => {
-    createTableCells(dataPerPeriod);
-    putRowsIntoArray(rowsPerPeriod);
-  }, [dataPerPeriod, teaSub]);
+    createTeaTabelCells(dataPerPeriod);
+    createStuTableCells(dataPerPeriod);
+    console.log(rowsPerPeriod);
+  }, [dataPerPeriod, teaSub, rowsPerPeriod]);
+
+  // useEffect(() => {
+  //   console.log(rows);
+  // }, [rows]);
+  // useEffect(() => {
+  //   console.log(dates);
+  // }, [dates]);
 
   function pushDataByPeriod(objArr) {
     const copy = JSON.parse(JSON.stringify(dataPerPeriod));
@@ -72,20 +79,18 @@ function Data() {
     setDataPerPeriod(copy);
   }
 
-  function createTableCells(objByPeriod) {
-    const newCells = {
-      1: [],
-      2: [],
-      3: [],
-      4: [],
-    };
+  
 
+  function createTeaTabelCells(objByPeriod) {
+    ////////
+    const copy = rowsPerPeriod;
+    ////////
+    const rowCellsArr = [];
     for (const period in objByPeriod) {
-      // teacher row
-      const cellsByRow = [];
+      const cellsByPeriod = [];
       for (const eachData of objByPeriod[period]) {
         if (eachData.isAvailable) {
-          cellsByRow.push(
+          cellsByPeriod.push(
             <TableCell key={eachData.uniqId} align="center">
               {eachData.name}:{" "}
               {teaSub[eachData.name]?.map(
@@ -94,35 +99,36 @@ function Data() {
             </TableCell>
           );
         } else {
-          cellsByRow.push(
-            <TableCell  key={eachData.uniqId} align="center"></TableCell>
+          cellsByPeriod.push(
+            <TableCell key={eachData.uniqId} align="center"></TableCell>
           );
         }
       }
-      cellsByRow.unshift(<TableCell rowSpan={4} key={period - 5}>{period}</TableCell>);
-      newCells[period].push(cellsByRow);
+      cellsByPeriod.unshift(<TableCell key={period - 5}>{period}</TableCell>);
+      rowCellsArr.push(cellsByPeriod);
+      //////////
+      copy[period].push(cellsByPeriod);
+      setRowsPerPeriod(copy);
+      /////////
+    }
+    setRows(rowCellsArr);
+  }
 
-      // student rows
+  function createStuTableCells(objByPeriod) {
+    const copy = rowsPerPeriod;
+    for (const period in objByPeriod) {
+      // const stuCellRows = [];
       for (let i = 0; i < 3; i++) {
         const stuCells = [];
         for (const eachData of objByPeriod[period]) {
           stuCells.push(<TableCell key={eachData.uniqId + i}></TableCell>);
         }
-        // stuCells.unshift(<TableCell key={period - 5}>{period}</TableCell>);
-        newCells[period].push(stuCells);
+        // stuCellRows.push(stuCells);
+        stuCells.unshift(<TableCell key={period - 5}>{period}</TableCell>);
+        copy[period].push(stuCells);
       }
     }
-    setRowsPerPeriod(newCells);
-  }
-
-  function putRowsIntoArray(rowsByPeriod) {
-    const allRows = [];
-    for (const period in rowsByPeriod) {
-      for (const eachRow of rowsByPeriod[period]) {
-        allRows.push(eachRow);
-      }
-    }
-    setAllRows(allRows);
+    setRowsPerPeriod(copy);
   }
 
   return (
@@ -146,7 +152,7 @@ function Data() {
             </TableRow>
           </TableHead>
           <TableBody>
-            {allRows.map((row, index) => (
+            {rows.map((row, index) => (
               <TableRow
                 key={index}
                 sx={{
