@@ -4,6 +4,7 @@
  */
 exports.seed = async function (knex) {
   // Deletes ALL existing entries
+  await knex("date_period").del();
   await knex("subjects").del();
   await knex("subjects").insert([
     { subject: "Japanese" },

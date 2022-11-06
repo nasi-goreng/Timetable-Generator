@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { DatesContext } from "../context";
 import axios from "axios";
 import { v4 as uuidv4 } from "uuid";
+import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -10,9 +11,23 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
-import { DataGrid, GridColDef, GridValueGetterParams } from "@mui/x-data-grid";
+
+const itemsFromBackend = [
+  { id: uuidv4(), content: "First task" },
+  { id: uuidv4(), content: "Second task" },
+];
+
+const columnsFromBackend = {
+  [uuidv4()]: {
+    name: "Todo",
+    items: itemsFromBackend,
+  },
+};
 
 function Data() {
+
+  const [columns, setColumns] = useState(columnsFromBackend);
+
   const { dates, setDates } = useContext(DatesContext);
   const [data, setData] = useState([]);
   const [teaSub, setTeaSub] = useState([]);
@@ -170,7 +185,7 @@ function Data() {
                 return (
                   <TableCell
                     colSpan={dataPerPeriod[1].length / 7}
-                    key={index}
+                    key={uuidv4()}
                     align="center"
                   >
                     {new Date(date).toLocaleDateString()}
@@ -191,7 +206,7 @@ function Data() {
             </TableRow>
             {studentRows.map((row, index) => (
               <TableRow
-                key={index}
+                key={uuidv4()}
                 sx={{
                   "&:last-child td, &:last-child th": { border: 0 },
                   height: 10,
@@ -200,6 +215,16 @@ function Data() {
                 {row}
               </TableRow>
             ))}
+            <TableRow
+              key={uuidv4()}
+              sx={{
+                "&:last-child td, &:last-child th": { border: 0 },
+                height: 10,
+              }}
+            >
+              <TableCell>
+              </TableCell>
+            </TableRow>
           </TableBody>
         </Table>
       </TableContainer>
